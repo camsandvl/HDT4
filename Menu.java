@@ -24,21 +24,22 @@ public class Menu {
     public void iniciar() {
         Scanner scanner = new Scanner(System.in);
         boolean continuar = true;
-    
+
         while (continuar) {
             System.out.println("Seleccione la implementación del Stack: arraylist, vector, lista");
             String tipoStack = scanner.nextLine();
-    
+
             this.stack = StackFactory.getStack(tipoStack);
-            String expresion = leerArchivo("datos.txt");
-    
-            System.out.println("Expresión infix: " + expresion);
-            String postfix = calculadora.infixToPostfix(expresion);
-            System.out.println("Expresión postfix: " + postfix);
-            System.out.println("Resultado: " + calculadora.evaluacionPostfix(postfix));
-        /**
-         * el programa termina cuando el usuario selecciona no o n, si selecciona s o si elige otra opcion
-         */
+            try {
+                String expresion = leerArchivo("C:\\Users\\males\\OneDrive\\Escritorio\\programas 2\\HDT4\\HDT4\\datos.txt");
+
+                System.out.println("Expresión infix: " + expresion);
+                String postfix = calculadora.infixToPostfix(expresion);
+                System.out.println("Expresión postfix: " + postfix);
+                System.out.println("Resultado: " + calculadora.evaluacionPostfix(postfix));
+            } catch (IOException e) {
+                System.out.println("Error al leer el archivo: " + e.getMessage());
+            }
             System.out.println("¿Desea realizar otra operación? (s/n)");
             String respuesta = scanner.nextLine();
             if (respuesta.equalsIgnoreCase("n")) {
@@ -48,18 +49,19 @@ public class Menu {
         scanner.close();
     }
 
-    private String leerArchivo(String nombreArchivo) {
+    public String leerArchivo(String ruta) throws IOException {
         StringBuilder contenido = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+        
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\males\\OneDrive\\Escritorio\\programas 2\\HDT4\\HDT4\\datos.txt"))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                contenido.append(linea);
+                contenido.append(linea).append("\n");
             }
-        } catch (IOException e) {
-            System.out.println("Error al leer el archivo: " + e.getMessage());
         }
-        return contenido.toString();
+        
+        return contenido.toString().trim();
     }
+
 
     public static void main(String[] args) {
         new Menu().iniciar();

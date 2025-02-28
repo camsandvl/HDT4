@@ -1,88 +1,95 @@
 /**
  * Emily Góngora, Camila Sandoval, Ale Sierra
- * Clase Calculadora que utiliza un patrón Singleton para poder crear una sola instancia de esta en diferentes clases.
- * Proporciona métodos para convertir expresiones infix a postfix y evaluar expresiones postfix.
+ * 
+ * Clase que implementa el patrón singleton para la calculadora, convierte una expresión infix a postfix y evalúa el resultado
+ * el método infix a postfix convierte la expresión leyeendo caracter por caracter y los va comparando con los operadores
  * 
  */
 import java.util.Stack;
 
 public class Calculadora {
-  private static Calculadora instancia;
+    public String infixToPostfix(String infix) {
+        StringBuilder postfix = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
+        String[] tokens = infix.split(" ");
 
-  private Calculadora() { }
-
-/**
- * obtiene la instancia de la clase calculadora
- * @return
- */
-  public static Calculadora getInstance() {
-    if (instancia == null) {
-      instancia = new Calculadora();
-    }
-      return instancia;
-  }
-
-  public String infixToPostfix (String infix) {
-    Stack <Character> pila = new Stack<> ();
-    StringBuilder postfix = new StringBuilder();
-
-    for (char c : infix.toCharArray()) {
-      if (Character.isDigit(c)) {
-        postfix.append(c);
-      } else if (c == '(') {
-        pila.push(c);
-      } else if (c == ')') {
-        while (!pila.isEmpty() && pila.peek() != '(') {
-          postfix.append(pila.pop());
+        for (String token : tokens) {
+            char c = token.charAt(0);
+            if (Character.isDigit(c)) {
+                postfix.append(token).append(" ");
+            } else if (c == '(') {
+                stack.push(c);
+            } else if (c == ')') {
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    postfix.append(stack.pop()).append(" ");
+                }
+                stack.pop();
+            } else {
+                while (!stack.isEmpty() && precedence(c) <= precedence(stack.peek())) {
+                    postfix.append(stack.pop()).append(" ");
+                }
+                stack.push(c);
+            }
         }
-        pila.pop();
-      } else {
-        while (!pila.isEmpty() && prioridad(c) <= prioridad(pila.peek())) {
-          postfix.append(pila.pop());
+
+        while (!stack.isEmpty()) {
+            postfix.append(stack.pop()).append(" ");
         }
-        pila.push(c);
-      }
+
+        return postfix.toString().trim();
     }
 
-    while (!pila.isEmpty()) {
-      postfix.append(pila.pop());
-    }
-    return postfix.toString();
-  }
-
-  public float evaluacionPostfix(String postfix) {
-    Stack <Float> pila = new Stack<>();
-
-    for (char c: postfix.toCharArray()) {
-      if (Character.isDigit(c)) {
-        pila.push((float) (c - '0'));
-      } else {
-        float a = pila.pop();
-        float b = pila.pop();
-        switch (c) {
-          case '+' -> pila.push(a + b);
-          case '-' -> pila.push(b - a);
-          case '*' -> pila.push(a * b);
-          case '/' -> pila.push(b / a);
+    private int precedence(char operator) {
+        switch (operator) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3;
+            default:
+                return -1;
         }
-      }
     }
-    return pila.pop();
-  }
 
-  /**
-  * método que permite establecer el orden aritmético de los operadores.
-  * 
-  * @param operador el operador aritmético cuyo orden se desea determinar
-  * @return un valor entero que representa la prioridad del operador
-  */
-  private int prioridad(char operador) {
-    return switch (operador) {
-      case '+', '-' -> 1;
-      case '*', '/' -> 2;
-      default -> 0;
-    };
-  }
+    public int evaluacionPostfix(String postfix) {
+        Stack<Integer> stack = new Stack<>();
+        String[] tokens = postfix.split(" ");
+
+        for (String token : tokens) {
+            if (Character.isDigit(token.charAt(0))) {
+                stack.push(Integer.parseInt(token));
+            } else {
+                int b = stack.pop();
+                int a = stack.pop();
+                int result = applyOperator(a, b, token.charAt(0));
+                stack.push(result);
+            }
+        }
+
+        return stack.pop();
+    }
+
+    private int applyOperator(int a, int b, char operator) {
+        switch (operator) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+            case '/':
+                return a / b;
+            case '^':
+                return (int) Math.pow(a, b);
+            default:
+                throw new IllegalArgumentException("Operador desconocido: " + operator);
+        }
+    }
+
+    public static Calculadora getInstance() {
+        return new Calculadora();
+    }
 }
-
-
