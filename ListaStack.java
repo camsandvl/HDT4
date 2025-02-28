@@ -1,4 +1,12 @@
+/**
+ * Emily Góngora, Camila Sandoval, Ale Sierra
+ * 
+ * Clase que ejecuta el stack de tipo lista, implementa la interfaz IStack
+ */
 public class ListaStack<T> implements IStack<T> {
+     /**
+     * Clase interna que representa un nodo en la lista enlazada.
+     */
     private class Nodo {
         T data;
         Nodo next;
@@ -17,7 +25,10 @@ public class ListaStack<T> implements IStack<T> {
         newNode.next = head;
         head = newNode;
     }
-
+     /**
+     * se usa un runtime exception para verificar si el stack esta vacio, en este caso, y verifica excepciones 
+     * que pueden ocurrir al ejectuar el programa
+     */
     @Override
     public T pop() {
         if (isEmpty()) throw new RuntimeException("Stack vacío");
@@ -35,5 +46,16 @@ public class ListaStack<T> implements IStack<T> {
     @Override
     public boolean isEmpty() {
         return head == null;
+    }
+
+    @Override
+    public int size() {
+        int count = 0;
+        Nodo current = head;
+        while (current != null) {
+            count++;
+            current = current.next;
+        }
+        return count;
     }
 }
