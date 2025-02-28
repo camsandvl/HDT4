@@ -1,46 +1,69 @@
-import java.awt.SystemColor;
+/**
+ * Emily Góngora, Camila Sandoval, Ale Sierra
+ * 
+ * Esta clase permite al usuario seleccionar la implementación del Stack,
+ * leer una expresión infix desde un archivo, convertirla a postfix y 
+ * evaluar el resultado utilizando una calculadora.
+ *depende de calculadora, istack y stackfactory
+ * 
+ */
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Scanner;
+import java.util.Scanner;
 
 public class Menu {
     private Calculadora calculadora;
-    public Menu () {
-        calculadora = Calculadora.getInstance();
+    private IStack<Integer> stack;
+
+    public Menu() {
+        this.calculadora = Calculadora.getInstance();
     }
 
-    public String leerArchivo(String archivo) {
+    public void iniciar() {
+        Scanner scanner = new Scanner(System.in);
+        boolean continuar = true;
+    
+        while (continuar) {
+            System.out.println("Seleccione la implementación del Stack: arraylist, vector, lista");
+            String tipoStack = scanner.nextLine();
+    
+            this.stack = StackFactory.getStack(tipoStack);
+            String expresion = leerArchivo("datos.txt");
+    
+            System.out.println("Expresión infix: " + expresion);
+            String postfix = calculadora.infixToPostfix(expresion);
+            System.out.println("Expresión postfix: " + postfix);
+            System.out.println("Resultado: " + calculadora.evaluacionPostfix(postfix));
+        /**
+         * el programa termina cuando el usuario selecciona no o n, si selecciona s o si elige otra opcion
+         */
+            System.out.println("¿Desea realizar otra operación? (s/n)");
+            String respuesta = scanner.nextLine();
+            if (respuesta.equalsIgnoreCase("n")) {
+                continuar = false;
+            }
+        }
+        scanner.close();
+    }
+
+    private String leerArchivo(String nombreArchivo) {
         StringBuilder contenido = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                contenido.append(linea).append("\n");
+                contenido.append(linea);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error al leer el archivo: " + e.getMessage());
         }
         return contenido.toString();
     }
 
-    public void mostrarMenu() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Seleccione la implementación de Stack:");
-        System.out.println("1. ArrayList");
-        System.out.println("2. Vector");
-        System.out.println("3. Lista Encadenada");
-        int opcion = sc.nextInt();
-        
-        //IStack <Float> stack = elegiorStack(opcion); pendiente
-
-        String infix = leerArchivo ("datos.txt");
-        System.out.println("Expresion infix: " + infix);
-        String postfix = calculadora.infixToPostfix(infix.trim());
-        System.out.println("Expresión postfix" + postfix);
-
-        float resultado = calculadora.evaluacionPostfix(postfix);
-        System.out.println("Resultado" + resultado);
+    public static void main(String[] args) {
+        new Menu().iniciar();
     }
 
-    //pendiente elegirStack
+
 }
