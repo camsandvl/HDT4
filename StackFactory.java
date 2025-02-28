@@ -1,3 +1,10 @@
+/**
+ * Emily Góngora, Camila Sandoval, Ale Sierra
+ * 
+ * Clase que permite al usuario seleccionar la implementación del Stack, lee el nombre del stack que desea el usuario
+ *  y si no es valido tira un mensaje
+ * 
+ */
 public class StackFactory {
     public static <T> IStack<T> getStack(String tipo) {
         switch (tipo.toLowerCase()) {
