@@ -1,7 +1,11 @@
 /**
  * Emily Góngora, Camila Sandoval, Ale Sierra
  * 
+<<<<<<< HEAD
  * Clase que ejecuta el stack de tipo vector, implementa la interfaz IStack
+=======
+ * Ejecuta el stack de tipo vector y implementa la interfaz IStack
+>>>>>>> 3d3bd9b12ec2418b277e584f577fa2cbaba9f950
  * 
  */
 import java.util.Vector;
@@ -15,7 +19,11 @@ public class VectorStack<T> implements IStack<T> {
     }
     /**
      * se usa un runtime exception para verificar si el stack esta vacio, en este caso, y verifica excepciones 
+<<<<<<< HEAD
      * que pueden ocurrir al ejectuar el programa
+=======
+     * que pueden ocurrir al ejectuar
+>>>>>>> 3d3bd9b12ec2418b277e584f577fa2cbaba9f950
      */
     @Override
     public T pop() {
@@ -33,10 +41,18 @@ public class VectorStack<T> implements IStack<T> {
     public boolean isEmpty() {
         return stack.isEmpty();
     }
+<<<<<<< HEAD
 
     @Override
     public int size() {
         return stack.size();
     }
 }
+=======
+>>>>>>> 3d3bd9b12ec2418b277e584f577fa2cbaba9f950
 
+    @Override
+    public int size() {
+        return stack.size();
+    }
+}
