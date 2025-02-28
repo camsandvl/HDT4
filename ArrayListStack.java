@@ -1,3 +1,9 @@
+/**
+ * Emily Góngora, Camila Sandoval, Ale Sierra
+ * 
+ * Clase ejecuta el stack cono un arraylist, implementa la interfaz IStack
+ * 
+ */
 import java.util.ArrayList;
 
 public class ArrayListStack<T> implements IStack<T> {
@@ -7,7 +13,10 @@ public class ArrayListStack<T> implements IStack<T> {
     public void push(T item) {
         stack.add(item);
     }
-
+    /**
+     * se usa un runtime exception para verificar si el stack esta vacio, en este caso, y verifica excepciones 
+     * que pueden ocurrir al ejectuar el programa
+     */
     @Override
     public T pop() {
         if (isEmpty()) throw new RuntimeException("Stack vacío");
@@ -23,5 +32,10 @@ public class ArrayListStack<T> implements IStack<T> {
     @Override
     public boolean isEmpty() {
         return stack.isEmpty();
+    }
+
+    @Override
+    public int size() {
+        return stack.size();
     }
 }
